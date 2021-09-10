@@ -1,3 +1,83 @@
 {
-  "extends": "next/core-web-vitals"
+    "env": {
+        "browser": true,
+        "node": true
+      },
+    "plugins": ["@typescript-eslint", "jsx-a11y"],
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint",
+    "prettier/react",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "overrides": [
+    {
+      "files": ["**/*.ts?(x)", "**/*.js?(x)"],
+      "rules": {
+        "@typescript-eslint/no-non-null-assertion": 0,
+        "@typescript-eslint/no-unsafe-member-access": 0,
+        "@typescript-eslint/no-unsafe-return": 0,
+        "@typescript-eslint/no-unsafe-call": 0,
+        "@typescript-eslint/no-unsafe-assignment": 0,
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-floating-promises": 0,
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ],
+        "@typescript-eslint/restrict-plus-operands": 0,
+        "@typescript-eslint/restrict-template-expressions": 0,
+        "@typescript-eslint/no-misused-promises": 0,
+        "@typescript-eslint/ban-ts-comment": 0,
+        "@typescript-eslint/interface-name-prefix": 0,
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/prefer-for-of": "off",
+        "camelcase": "off",
+        "@typescript-eslint/ban-ts-ignore": 0,
+        "eqeqeq": 0,
+        "prefer-const": 0,
+        "handle-callback-err": 0,
+        "no-undef": 2,
+        "no-unsafe-finally": 0,
+        "no-use-before-define": 0,
+        "no-useless-escape": 0,
+        "react/jsx-indent": 0,
+        "react/react-": 0,
+        "react/prop-types": 0,
+        "react/jsx-indent-props": 0,
+        "no-return-await": 0,
+        "no-constant-condition": 0,
+        "no-unused-vars": 0,
+        "no-unreachable": "warn",
+        "react/jsx-props-no-multi-spaces": 0,
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
+        "react/react-in-jsx-scope": 0,
+        "@typescript-eslint/camelcase": 0,
+        "@typescript-eslint/no-unused-vars": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/no-this-alias": 0,
+        "@typescript-eslint/member-delimiter-style": 0,
+        "@typescript-eslint/no-explicit-any": 0,
+        "react/jsx-closing-bracket-location": 0,
+        "react/jsx-closing-tag-location": 0,
+        "react/jsx-pascal-case": 0,
+        "react/jsx-tag-spacing": 0,
+        "react/jsx-curly-newline": 0,
+        "react/jsx-handler-names": 0,
+        "curly": ["error", "all"]
+      }
+    }
+  ]
 }

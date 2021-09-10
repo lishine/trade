@@ -32,3 +32,55 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/**/node_modules
+/**/.pnp
+/**/.pnp.js
+
+# testing
+/**/coverage
+
+# next.js
+/**/.next/
+/**/out/
+
+# production
+/**/build
+
+# docs
+doc/
+
+# misc
+/**/.DS_Store
+*.code-workspace
+
+/**/.vscode
+/**/.history
+/**/.idea
+/**/package-lock.json
+/**/.env
+/**/*.log
+/**/db_data
+/**/dist
+/**/external
+/**/.secrete*
+/**/now*
+/**/ignore
+/**/stats.html
+/**/.DS_Store
+/**/generated-schema.graphql
+/**/temp/**/*
+/**/gcs.sql
+/**/*generated-doc*
+
+*.scss.d.ts
+
+size-plugin.json
+
+debug.log
+README.md
+src/temp_read_version_package.json
+generated-doc-launcherTypes.ts
