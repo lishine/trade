@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.6.7",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "bybit-api": "^2.1.0",
+    "framer-motion": "^4.1.17",
     "lodash-es": "^4.17.21",
     "next": "11.1.2",
     "react": "17.0.2",
@@ -16,10 +21,12 @@
     "react-dom": "17.0.2",
     "react-handler-hooks": "^2.1.0",
     "react-hot-toast": "^2.1.1",
+    "react-query": "^3.23.2",
     "react-use": "^17.3.1",
     "throttle-debounce": "^3.0.1",
     "use-immer": "^0.6.0",
-    "use-resize-observer": "^8.0.0"
+    "use-resize-observer": "^8.0.0",
+    "wretch": "^1.7.6"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.4",
