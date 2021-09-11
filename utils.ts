@@ -35,3 +35,33 @@ export function JSONstringify(json: any) {
 
     console.log.apply(console, arr)
 }
+
+const roundDecimals = (n: number, decimals: number) => {
+    return Math.round((n + Number.EPSILON) * 10 ** decimals) / 10 ** decimals
+}
+
+export const priceAddPercent = ({
+    percent,
+    isPlus,
+    price,
+    decimals,
+}: {
+    price: number
+    percent: number
+    decimals?: number
+    isPlus: boolean
+}) => {
+    let n = price + ((isPlus ? 1 : -1) * (price * percent)) / 100
+    if (decimals) {
+        n = roundDecimals(n, decimals)
+    }
+    return n
+}
+
+export const sleep = (ms: number) => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(undefined)
+        }, ms)
+    })
+}

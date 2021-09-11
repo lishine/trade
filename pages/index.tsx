@@ -11,11 +11,9 @@ import { useHandler } from 'react-handler-hooks'
 import { Button, ButtonGroup, useColorMode } from '@chakra-ui/react'
 
 const Home: NextPage = () => {
-    // const { colorMode, toggleColorMode } = useColorMode()
-    // console.log('colorMode', colorMode)
     const isFirstMount = useFirstMountState()
 
-    let { data, isLoading, error } = useQuery<ApiHelloResult, string>(
+    let { data } = useQuery<ApiHelloResult, string>(
         'hello',
         () => wretch('/api/getStatus').post().json(),
         { refetchInterval: 1000 }
@@ -26,8 +24,7 @@ const Home: NextPage = () => {
     const [latest, setLatest] = useState(0)
 
     useEffect(() => {
-        // data && JSONstringify(data)
-        setRefetchCnt(_c => (_c++ > 10 ? 1 : _c))
+        setRefetchCnt(c => (c++ > 10 ? 1 : c))
         if (!isFirstMount) {
             let newLatest = data?.latest
             setPrev(newLatest)
@@ -35,7 +32,7 @@ const Home: NextPage = () => {
         }
     }, [data, isFirstMount])
 
-    let { mutate: placeOrder, error: er } = useMutation(
+    let { mutate: placeOrder, error: er, isLoading :isMutationLoading} = useMutation(
         (vars: Record<string, any>) => wretch('/api/placeOrder').post(vars).json(),
         {
             onError: er => {
@@ -47,16 +44,10 @@ const Home: NextPage = () => {
         }
     )
 
-    // useEffect(() => {
-    // if (!isFirstMount) {
-    // console.log('er', er)
-    // }
-    // }, [isFirstMount, er])
-
     return (
         <div className={styles.container}>
             <main className={styles.main}>
-                <ButtonGroup variant='solid' size='lg' spacing='20'>
+                <ButtonGroup variant='solid' size='lg' spacing='20' isDisabled={isMutationLoading}>
                     <Button colorScheme='darkgreen' onClick={() => placeOrder({ buy: true })}>
                         Long
                     </Button>
@@ -82,3 +73,12 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+// useEffect(() => {
+// if (!isFirstMount) {
+// console.log('er', er)
+// }
+// }, [isFirstMount, er])
+
+// const { colorMode, toggleColorMode } = useColorMode()
+// console.log('colorMode', colorMode)
