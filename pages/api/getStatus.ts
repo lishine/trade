@@ -1,10 +1,8 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { SYMBOL } from './placeOrder'
-import { client } from './__client'
-import { RequestContext, wrapRoute } from './__common'
-
-export type ApiHelloResult = Record<string, any>
+import { SYMBOL } from './__/constants'
+import { client } from './__/client'
+import { RequestContext, wrapRoute } from './__/common'
+import { ApiHelloResult } from './__/types'
 
 const getLastPrice = async ({ symbol }: { symbol: string }) => {
     let d = await client.getTickers({ symbol }).catch(err => {

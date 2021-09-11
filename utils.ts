@@ -48,7 +48,7 @@ export const priceAddPercent = ({
 }: {
     price: number
     percent: number
-    decimals?: number
+    decimals: number
     isPlus: boolean
 }) => {
     let n = price + ((isPlus ? 1 : -1) * (price * percent)) / 100
@@ -57,6 +57,22 @@ export const priceAddPercent = ({
     }
     return n
 }
+
+// export const calculateDifPercent = ({
+//     price1,
+//     price2,
+//     decimals,
+// }: {
+//     price1: number
+//     price2: number
+//     decimals: number
+// }) => {
+//     let n = (100 * Math.abs(newLimitPrice - oldLimitPrice)) / oldLimitPrice
+//     if (decimals) {
+//         n = roundDecimals(n, decimals)
+//     }
+//     return n
+// }
 
 export const sleep = (ms: number) => {
     return new Promise(resolve => {
