@@ -34,19 +34,35 @@ export const modifyActiveOrder = async ({
     symbol,
     orderId,
     orderPrice,
+    stopLoss,
 }: {
     orderId: string
     symbol: string
-    orderPrice: number
+    stopLoss?: number
+    orderPrice?: number
 }) => {
     let data = await client
-        .replaceActiveOrder({ symbol, order_id: orderId, p_r_price: orderPrice })
+        .replaceActiveOrder(
+            Object.assign(
+                {},
+                { symbol, order_id: orderId },
+                stopLoss && {
+                    stop_loss: stopLoss,
+                },
+                orderPrice && {
+                    p_r_price: orderPrice,
+                }
+            )
+        )
         .catch(err => {
             console.error(err)
         })
     return data
 }
 
+export const check = (data: any) => {
+    return data?.ret_code === 0 && data?.ext_code === ''
+}
 
 // take_profit: priceAddPercent({
 //     price: latest,

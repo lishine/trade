@@ -1,9 +1,9 @@
 {
-    "env": {
-        "browser": true,
-        "node": true
-      },
-    "plugins": ["@typescript-eslint", "jsx-a11y"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["@typescript-eslint", "jsx-a11y"],
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
@@ -13,12 +13,17 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
-    "prettier/@typescript-eslint",
-    "prettier/react",
+    "eslint-config-prettier",
     "plugin:jsx-a11y/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "overrides": [
+    {
+      "files": ["*.js","*.ts", "*.tsx"], // Your TypeScript files extension
+      "parserOptions": {
+        "project": ["./www/tsconfig.json"] // Specify it only for TypeScript files
+      }
+    },
     {
       "files": ["**/*.ts?(x)", "**/*.js?(x)"],
       "rules": {

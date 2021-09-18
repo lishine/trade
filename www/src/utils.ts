@@ -36,8 +36,9 @@ export function JSONstringify(json: any) {
     console.log.apply(console, arr)
 }
 
-const roundDecimals = (n: number, decimals: number) => {
+export const roundDecimals = (n: number, decimals: number) => {
     return Math.round((n + Number.EPSILON) * 10 ** decimals) / 10 ** decimals
+    // return Math.round(n * 10 ** decimals) / 10 ** decimals
 }
 
 export const priceAddPercent = ({
@@ -75,7 +76,7 @@ export const priceAddPercent = ({
 // }
 
 export const sleep = (ms: number) => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         setTimeout(() => {
             resolve(undefined)
         }, ms)

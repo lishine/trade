@@ -4,6 +4,8 @@ import wretch from 'wretch'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeConfig, extendTheme } from '@chakra-ui/react'
+import { useMountedState } from 'react-use'
+import React, { useState, useLayoutEffect, ReactNode, useEffect, ReactElement } from 'react'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -63,7 +65,7 @@ const theme = extendTheme({
     config,
 })
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
     return (
         <QueryClientProvider client={queryClient}>
             <ChakraProvider resetCSS theme={theme}>
@@ -72,4 +74,19 @@ function MyApp({ Component, pageProps }: AppProps) {
         </QueryClientProvider>
     )
 }
-export default MyApp
+const NoSSRComponent = ({ children }: { children: ReactElement }) => {
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    return mounted ? children : <main>empty</main>
+}
+const NoSSR = (Component: any) => (props: any) =>
+    (
+        <NoSSRComponent>
+            <Component {...props} />
+        </NoSSRComponent>
+    )
+
+export default NoSSR(App)

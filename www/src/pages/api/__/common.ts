@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
+import promiseAny from 'promise.any'
+
+promiseAny.shim()
+
 export type Session = { id: string }
 
 let isProd = process.env.NODE_ENV == 'production'
