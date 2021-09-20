@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '../styles/global.scss'
 import type { AppProps } from 'next/app'
 import wretch from 'wretch'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -24,7 +24,7 @@ const theme = extendTheme({
     styles: {
         global: {
             'html, body': {
-                // bg: 'gray.800',
+                // bg: 'gray.900',
                 // color: 'gray.100',
             },
         },
@@ -82,6 +82,8 @@ const NoSSRComponent = ({ children }: { children: ReactElement }) => {
 
     return mounted ? children : <main>empty</main>
 }
+
+/* eslint-disable react/display-name */
 const NoSSR = (Component: any) => (props: any) =>
     (
         <NoSSRComponent>
