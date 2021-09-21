@@ -6,14 +6,21 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, ReferenceLine } from 'rec
 import { AggregatedTrade, ReconnectingWebSocketHandler } from 'binance-api-node'
 
 import { sleep } from '~/utils'
-import { symbolData, TSymbols, TTick } from '~/features/Trade/constants'
+import { getExitPrice, getLossPrice, symbols, TSymbols, TTick } from '~/features/Trade/localConstants'
 import { bClient, createTick } from '~/features/Trade/dataUtils'
 import { RefLabel } from '~/features/Trade/RefLabel'
+import { UI } from '~/features/Trade/UI'
+import wretch from 'wretch'
 
 let cnt = 0
 
 export const Trade = () => {
     const [symbol, setSymbol] = useState<TSymbols>('DGBUSDT')
+    const [investment, setInvestment] = useState(100)
+    const [profit, setProfit] = useState(0.1)
+    const [loss, setLoss] = useState(0.1)
+    const [isLong, setIsLong] = useState(true)
+
     const [data, setData] = useState<TTick[]>([])
     let refData = useLatest(data)
     const [loaded, setLoaded] = useState(false)
@@ -40,7 +47,11 @@ export const Trade = () => {
         })
 
         return () => {
-            clean?.()
+            // try {
+            // clean?.()
+            // } catch (error) {
+            // error
+            // }
         }
     }, [symbol])
 
@@ -64,7 +75,7 @@ export const Trade = () => {
 
                     let startTimestamp = mappedTrades[0].timestamp
                     let endTimestamp = refData.current[refData.current.length - 1].timestamp
-                    if ((endTimestamp - startTimestamp) / 60000 > 5) {
+                    if ((endTimestamp - startTimestamp) / 60000 > 60) {
                         break
                     }
                     await sleep(10)
@@ -92,8 +103,44 @@ export const Trade = () => {
         }
     }, [slicedData])
 
+    let exitPrice = getExitPrice({
+        enterPrice: lastPrice,
+        investment: investment,
+        isLong: isLong,
+        symbol: symbol,
+        profit: profit,
+    })
+
+    let stopLossPrice = getLossPrice({
+        enterPrice: lastPrice,
+        investment: investment,
+        isLong: isLong,
+        symbol: symbol,
+        loss: loss,
+    })
+
+    console.log('isLong', isLong)
+
     return (
-        <div className={styles.container}>
+        <div>
+            <UI
+                isLong={isLong}
+                onDirectionChange={(isLong: boolean) => {
+                    setIsLong(isLong)
+                }}
+                placeOrder={() => {
+                    wretch('/api/placeBinanceOrder')
+                        .post({
+                            isLong,
+                            symbol: symbol,
+                            quantity: investment / lastPrice,
+                            exitPrice: exitPrice,
+                            stopLossPrice: stopLossPrice,
+                        })
+                        .json()
+                }}
+                anyObject={{}}
+            />
             <div
                 onWheel={(w) => {
                     setSliceLength((sl) => {
@@ -107,10 +154,25 @@ export const Trade = () => {
                     })
                 }}
             >
-                <LineChart width={1900} height={1000} data={slicedData}>
+                <LineChart width={1900} height={880} data={slicedData}>
                     <ReferenceLine
                         y={lastPrice}
-                        label={<RefLabel label={lastPrice} />}
+                        label={<RefLabel color='green' label={lastPrice} />}
+                        color='green'
+                        stroke='green'
+                        strokeDasharray='3 3'
+                    />
+                    <ReferenceLine
+                        alwaysShow
+                        y={exitPrice}
+                        label={<RefLabel color='blue' label={exitPrice} />}
+                        stroke='blue'
+                        strokeDasharray='3 3'
+                    />
+                    <ReferenceLine
+                        alwaysShow
+                        y={stopLossPrice}
+                        label={<RefLabel color='red' label={stopLossPrice} />}
                         stroke='red'
                         strokeDasharray='3 3'
                     />
@@ -118,7 +180,7 @@ export const Trade = () => {
                         isAnimationActive={false}
                         type='monotone'
                         dataKey='price'
-                        stroke='white'
+                        stroke='#2A62FF'
                         strokeWidth={1}
                         dot={false}
                         // dot={{ stroke: 'grey', strokeWidth: 1 }}
@@ -134,9 +196,11 @@ export const Trade = () => {
                         type='number'
                         domain={['dataMin', 'dataMax']}
                         padding={{
-                            top: 20,
+                            top: 0,
                             bottom: 20,
                         }}
+                        width={100}
+                        tickFormatter={(n: number) => n.toFixed(symbols[symbol].decimals)}
                     />
                 </LineChart>
             </div>

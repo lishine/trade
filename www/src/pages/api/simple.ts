@@ -3,8 +3,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 // import { sendSimpleOrder } from '~/pages/api/__/simple/sendSimpleOrder'
 import { RequestContext, wrapRoute } from './__/common'
 
-const simple = async (req: RequestContext, res: NextApiResponse) => {
-    console.log('req.body', req.body)
-    // return sendSimpleOrder(req.body)
-}
-export default wrapRoute(simple)
+// const simple = async (req: RequestContext, res: NextApiResponse) => {
+// console.log('req.body', req.body)
+// return await sendSimpleOrder(req.body)
+// }
+// export default wrapRoute(simple)

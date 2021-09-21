@@ -1,6 +1,5 @@
 import '../styles/global.scss'
 import type { AppProps } from 'next/app'
-import wretch from 'wretch'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeConfig, extendTheme } from '@chakra-ui/react'

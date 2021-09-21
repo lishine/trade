@@ -3,7 +3,7 @@ export function JSONstringify(json: any) {
         json = JSON.stringify(json, undefined, '\t')
     }
 
-    var arr = [],
+    let arr = [],
         _string = 'color:green',
         _number = 'color:darkorange',
         _boolean = 'color:blue',
@@ -13,7 +13,7 @@ export function JSONstringify(json: any) {
     json = json.replace(
         /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
         function (match: any) {
-            var style = _number
+            let style = _number
             if (/^"/.test(match)) {
                 if (/:$/.test(match)) {
                     style = _key
@@ -33,12 +33,12 @@ export function JSONstringify(json: any) {
 
     arr.unshift(json)
 
+    /* eslint-disable prefer-spread */
     console.log.apply(console, arr)
 }
 
 export const roundDecimals = (n: number, decimals: number) => {
     return Math.round((n + Number.EPSILON) * 10 ** decimals) / 10 ** decimals
-    // return Math.round(n * 10 ** decimals) / 10 ** decimals
 }
 
 export const priceAddPercent = ({

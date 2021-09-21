@@ -1,6 +1,6 @@
 import Binance, { ReconnectingWebSocketHandler, AggregatedTrade } from 'binance-api-node'
 import dayjs from 'dayjs'
-import { TTick } from '~/features/Trade/constants'
+import { TTick } from '~/features/Trade/localConstants'
 
 export const createTick = ({ trade }: { trade: AggregatedTrade }) => {
     let timestamp = +trade.timestamp

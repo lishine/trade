@@ -11,7 +11,7 @@ import { fromrest } from '~/pages/api/__/strategies/fromrest/fromrest'
 const placeOrder = async (req: RequestContext, res: NextApiResponse) => {
     let strategy = req.body.strategy
     if (strategy === 'autolimitmove') {
-        autolimitmove({ isBuy: !!req.body.buy })
+        await autolimitmove({ isBuy: !!req.body.buy })
     } else if (strategy === 'fromrest') {
         fromrest()
     }
