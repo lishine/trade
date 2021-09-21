@@ -13,12 +13,13 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended",
-    "prettier"
+    "prettier",
+    "plugin:valtio/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "overrides": [
     {
-      "files": ["*.js","*.ts", "*.tsx"], // Your TypeScript files extension
+      "files": ["*.js", "*.ts", "*.tsx"], // Your TypeScript files extension
       "parserOptions": {
         "project": ["./www/tsconfig.json"] // Specify it only for TypeScript files
       }
@@ -26,6 +27,8 @@
     {
       "files": ["**/*.ts?(x)", "**/*.js?(x)"],
       "rules": {
+        "valtio/state-snapshot-rule": "warn",
+        "valtio/avoid-this-in-proxy": "warn",
         "@typescript-eslint/no-non-null-assertion": 0,
         "@typescript-eslint/no-unsafe-member-access": 0,
         "@typescript-eslint/no-unsafe-return": 0,

@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-query'
 import { useHandler } from 'react-handler-hooks'
 import { useEffect, useState } from 'react'
 import { useLatest, useFirstMountState, useMountedState } from 'react-use'
+import { proxy, useSnapshot } from 'valtio'
 
 import {
     Input,
@@ -17,21 +18,11 @@ import {
     Text,
     Switch,
 } from '@chakra-ui/react'
-import { TTick } from '~/features/Trade/localConstants'
+import { state } from '~/features/Trade/state/state'
+import { placeOrder } from '~/features/Trade/state/serverActions'
 
-export const UI = (props: any) => {
-    const [quantity, setQuantity] = useState(0.001)
-    const [stopLossPips, setStopLossPips] = useState(20)
-    const [takeProfitLimitPips, setTakeProfitLimitPips] = useState(10)
-    const isFirstMount = useFirstMountState()
-
-    const [refetchCnt, setRefetchCnt] = useState(0)
-    const [prev, setPrev] = useState(0)
-    const [latest, setLatest] = useState(0)
-
-    const [interpolatedData, setInterpolatedData] = useState<TTick[][]>([[]])
-    const [rawData, setRawData] = useState<TTick[]>([])
-
+export const UI = () => {
+    let snap = useSnapshot(state)
     return (
         <div>
             {/* <ButtonGroup variant='solid' size='lg' spacing='20'>
@@ -49,18 +40,30 @@ export const UI = (props: any) => {
                     <Button
                         colorScheme='darkgreen'
                         onClick={() => {
-                            props.placeOrder()
+                            state.isLong = true
+                            placeOrder()
                         }}
                     >
-                        Place Binance order
+                        Long
+                    </Button>
+                    <Button
+                        colorScheme='darkred'
+                        onClick={() => {
+                            state.isLong = false
+                            placeOrder()
+                        }}
+                    >
+                        Short
                     </Button>
                 </ButtonGroup>
                 <HStack spacing={20}>
                     <Text>LONG</Text>
                     <Switch
-                        value={props.isLong}
+                        value={snap.isLong ? 'long' : ''}
                         size='lg'
-                        onChange={(e) => props.onDirectionChange(!e.target.checked)}
+                        onChange={(e) => {
+                            state.isLong = !e.target.checked
+                        }}
                     />
                     <Text>SHORT</Text>
                 </HStack>

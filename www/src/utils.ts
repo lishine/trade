@@ -1,3 +1,6 @@
+import { subscribe } from 'valtio'
+import { subscribeKey } from 'valtio/utils'
+
 export function JSONstringify(json: any) {
     if (typeof json != 'string') {
         json = JSON.stringify(json, undefined, '\t')
@@ -81,4 +84,34 @@ export const sleep = (ms: number) => {
             resolve(undefined)
         }, ms)
     })
+}
+
+export const waitForStateOnce = ([proxyObject, key]: [any, string?], fn: () => void) => {
+    if (key) {
+        let unsubscribe = subscribeKey(proxyObject, key, () => {
+            unsubscribe()
+            fn()
+        })
+    } else {
+        let unsubscribe = subscribe(proxyObject, () => {
+            unsubscribe()
+            fn()
+        })
+    }
+}
+
+export const runAndSubscribeKey = (proxyObject: any, key: string, fn: () => void) => {
+    fn()
+    return subscribeKey(proxyObject, key, fn)
+}
+
+export const runAndSubscribeFew = (ar: [any, string?][], fn: () => void) => {
+    fn()
+    let subscriptions = [] as (() => void)[]
+    ar.forEach((p) => {
+        subscriptions.push(p[1] ? subscribeKey(p[0], p[1], fn) : subscribe(p[0], fn))
+    })
+    return () => {
+        subscriptions.forEach((s) => s())
+    }
 }

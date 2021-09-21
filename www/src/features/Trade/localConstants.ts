@@ -2,7 +2,6 @@ import { roundDecimals } from '~/utils'
 
 export type TTick = {
     timestamp: number
-    time: string
     price: number
 }
 
@@ -34,7 +33,7 @@ export type TSymbols = keyof typeof symbols
 export const _Binance_Market_Fee = 0.036
 export const _Binance_Limit_Fee = 0.018
 
-export const getExitPrice = ({
+export const calcExitPrice = ({
     symbol,
     enterPrice,
     isLong,
@@ -53,7 +52,7 @@ export const getExitPrice = ({
     return roundDecimals(exitPrice, symbols[symbol].decimals)
 }
 
-export const getLossPrice = ({
+export const calcLossPrice = ({
     symbol,
     enterPrice,
     isLong,

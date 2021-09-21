@@ -13,6 +13,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-valtio": "^0.4.0",
     "next": "11.1.2",
     "prettier": "^2.4.0",
     "ts-node": "^10.2.1",
