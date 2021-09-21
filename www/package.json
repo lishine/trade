@@ -40,6 +40,7 @@
     "throttle-debounce": "^3.0.1",
     "use-immer": "^0.6.0",
     "use-resize-observer": "^8.0.0",
+    "valtio": "^1.2.3",
     "wretch": "^1.7.6"
   },
   "devDependencies": {

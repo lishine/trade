@@ -30,7 +30,7 @@ export const Trade = () => {
 
         setLoaded(false)
         setData([])
-        let cnt = 0
+        let cnt = 1
         clean = bClient.ws.futuresAggTrades([symbol], (trade) => {
             // if (cnt > 1) {
             // return
