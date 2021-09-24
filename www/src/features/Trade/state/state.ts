@@ -38,5 +38,9 @@ export const derivedState = derive({
 
 export const dataState = proxy({
     data: [] as TTick[],
+    dataWs: [] as TTick[],
+    dataDirect: [] as TTick[],
+    dataAvg: [] as TTick[][],
     slicedData: [] as TTick[],
+    aggData: [] as TTick[][],
 })

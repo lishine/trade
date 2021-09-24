@@ -65,6 +65,9 @@ const theme = extendTheme({
 })
 
 function App({ Component, pageProps }: AppProps) {
+    useEffect(() => {
+        document.body.style.background = 'var(--chakra-colors-gray-800)'
+    }, [])
     return (
         <QueryClientProvider client={queryClient}>
             <ChakraProvider resetCSS theme={theme}>

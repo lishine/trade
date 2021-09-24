@@ -2,11 +2,15 @@ import Binance, { ReconnectingWebSocketHandler, AggregatedTrade } from 'binance-
 import dayjs from 'dayjs'
 import { TTick } from '~/features/Trade/localConstants'
 
+// {
+//     timestamp: string | number
+//     price: string | number
+// }
 export const createTick = ({ trade }: { trade: AggregatedTrade }) => {
-    let timestamp = +trade.timestamp
-    let time = dayjs(timestamp).format('mm')
+    let time = +trade.timestamp
     let price = +trade.price
-    return { timestamp: timestamp, time: time, price: price } as TTick
+    let quantity = +trade.quantity
+    return { time, quantity, price: price } as TTick
 }
 
 export const bClient = Binance()

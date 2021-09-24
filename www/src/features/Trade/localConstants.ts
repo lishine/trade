@@ -1,8 +1,9 @@
 import { roundDecimals } from '~/utils'
 
 export type TTick = {
-    timestamp: number
+    time: number
     price: number
+    quantity: number
 }
 
 export let symbols = {
