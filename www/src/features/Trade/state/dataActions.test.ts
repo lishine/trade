@@ -1,21 +1,25 @@
 import { AggregatedTrade } from 'binance-api-node'
 import dayjs from 'dayjs'
-import { dataState } from '~/features/Trade/state/dataState'
+import { TTick } from '~/features/Trade/localConstants'
+import { dataState, TDataLevelsResidue } from '~/features/Trade/state/dataState'
 import { createTick } from '~/features/Trade/utils'
-import { aggData } from './dataActions'
+import { doAggData } from './dataActions'
 
 const testWsAdditionToTheRight = () => {
     let _ws_data_len_ = 10
-    let wsData = new Array(_ws_data_len_).fill(undefined).map((_, index) => {
+    let data = new Array(_ws_data_len_).fill(undefined).map((_, index) => {
         let trade = { timestamp: index, price: index, quantity: 0 }
         return createTick({ trade })
     })
 
-    dataState.dataWs = wsData
+    let aggData: TTick[][] = []
+    let dataLevelsResidue: TDataLevelsResidue = { left: [], right: [] }
+
+    dataState.dataWs = data
     dataState.aggData.length = 0
     dataState.dataLevelsResidue = { left: [], right: [] }
 
-    aggData({ dataKey: 'dataWs', isPrepend: false })
+    doAggData({ isPrepend: false, dataLevelsResidue, addData: data, aggData })
 
     console.log('--------------FIRST TIME----------------')
     console.log('aggData', dataState.aggData)
@@ -23,9 +27,9 @@ const testWsAdditionToTheRight = () => {
     console.log('dataState.dataWs', dataState.dataWs)
     console.log('-----END------FIRST TIME----------------')
 
-    wsData = wsData.map((d) => ({ ...d, time: d.time + _ws_data_len_, price: d.price + _ws_data_len_ }))
-    dataState.dataWs = wsData
-    aggData({ dataKey: 'dataWs', isPrepend: false })
+    data = data.map((d) => ({ ...d, time: d.time + _ws_data_len_, price: d.price + _ws_data_len_ }))
+    dataState.dataWs = data
+    doAggData({ isPrepend: false, dataLevelsResidue, addData: data, aggData })
 
     console.log('-----START----SECOND TIME----------------')
     console.log('aggData', dataState.aggData)
@@ -41,28 +45,26 @@ const testPastDataAdditionToTheLeft = () => {
         return createTick({ trade })
     })
 
-    dataState.aggData.length = 0
-    dataState.dataLevelsResidue = { left: [], right: [] }
+    let aggData: TTick[][] = []
+    let dataLevelsResidue: TDataLevelsResidue = { left: [], right: [] }
 
     console.log('--------------FIRST TIME----------------')
 
-    dataState.data = data
-    aggData({ dataKey: 'data', isPrepend: true })
+    doAggData({ isPrepend: true, dataLevelsResidue, addData: data, aggData })
 
     console.log('aggData', dataState.aggData)
     console.log('dataState.dataLevelsResidue', JSON.stringify(dataState.dataLevelsResidue, null, 2))
-    console.log('dataState.data', dataState.data)
+    console.log('dataState.data', dataState.pastData)
     console.log('-----END------FIRST TIME----------------')
 
     console.log('-----START----SECOND TIME----------------')
 
     data = data.map((d) => ({ ...d, time: d.time - _data_len_, price: d.price - _data_len_ }))
-    dataState.data = data
-    aggData({ dataKey: 'data', isPrepend: true })
+    doAggData({ isPrepend: true, dataLevelsResidue, addData: data, aggData })
 
     console.log('aggData', dataState.aggData)
     console.log('dataState.dataLevelsResidue', JSON.stringify(dataState.dataLevelsResidue, null, 2))
-    console.log('dataState.data', dataState.data)
+    console.log('dataState.data', dataState.pastData)
     console.log('-----END------SECOND TIME----------------')
 }
 

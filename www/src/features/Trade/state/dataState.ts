@@ -5,10 +5,8 @@ import { calcExitPrice, calcLossPrice, symbols, TSymbols, TTick } from '~/featur
 export type TDataLevelsResidue = { left: TTick[][]; right: TTick[][] }
 
 export const dataState = proxy({
-    data: [] as TTick[],
+    pastData: [] as TTick[],
     dataWs: [] as TTick[],
-    dataDirect: [] as TTick[],
-    dataAvg: [] as TTick[][],
     slicedData: [] as TTick[],
     aggData: [] as TTick[][],
     dataLevelsResidue: { left: [], right: [] } as TDataLevelsResidue,

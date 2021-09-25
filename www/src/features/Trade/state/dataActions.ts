@@ -11,7 +11,7 @@ import { state } from '~/features/Trade/state/state'
 import { bClient, createTick } from '~/features/Trade/utils'
 import { JSONstringify, sleep, waitForStateOnce } from '~/utils'
 import { sortBy, first, last, chunk, max, min } from 'lodash-es'
-import { dataState, derivedDataState } from '~/features/Trade/state/dataState'
+import { dataState, derivedDataState, TDataLevelsResidue } from '~/features/Trade/state/dataState'
 
 let clean: ReconnectingWebSocketHandler | undefined
 let cnt = 0
@@ -118,7 +118,7 @@ const doAvg = ({ data, base }: { data: TTick[]; base: number }) => {
 
 export const loadData = () => {
     waitForStateOnce([dataState.aggData], async () => {
-        dataState.data.length = 0
+        dataState.pastData.length = 0
         for (let index = 0; index < 100; index++) {
             console.log('loading past trades', index)
             let aggTrades: AggregatedTrade[] = []
@@ -129,18 +129,12 @@ export const loadData = () => {
             })
             let mappedTrades = aggTrades.map((t) => createTick({ trade: t }))
 
-            dataState.data.unshift(...mappedTrades)
+            dataState.pastData.unshift(...mappedTrades)
             if (derivedDataState.minutesLoaded > 100) {
                 break
             }
             await sleep(100)
         }
-        // state.slicedDataLength = dataState.data.length
-        // dataState.dataAvg[0] = doAvg({ data: dataState.data })
-        // dataState.dataAvg[1] = doAvg({ data: dataState.dataAvg[0] })
-        // dataState.dataAvg[2] = doAvg({ data: dataState.dataAvg[1] })
-        // dataState.dataAvg[3] = doAvg({ data: dataState.dataAvg[2] })
-        // dataState.dataAvg[4] = doAvg({ data: dataState.dataAvg[3] })
     })
 }
 
@@ -151,46 +145,41 @@ const _max_level_ = 100
 // data can be added from the left(past) or from the right(future - websockets)
 // residue is saved for the next data
 // isPast=true => prepend data
-export const aggData = ({ isPrepend, dataKey }: { isPrepend: boolean; dataKey: 'dataWs' | 'data' }) => {
+export const doAggData = ({
+    isPrepend,
+    addData,
+    aggData,
+    dataLevelsResidue,
+}: {
+    isPrepend: boolean
+    addData: TTick[]
+    aggData: TTick[][]
+    dataLevelsResidue: TDataLevelsResidue
+}) => {
     let dir: 'left' | 'right' = isPrepend ? 'left' : 'right'
     let shift: 'unshift' | 'push' = isPrepend ? 'unshift' : 'push'
-    let aggData = dataState.aggData
 
     aggData[0] = aggData[0] ?? []
 
-    let add = [...dataState[dataKey]]
-    dataState[dataKey].length = 0
-
-    aggData[0][shift](...add)
-    dataState.dataLevelsResidue[dir][0] = dataState.dataLevelsResidue[dir][0] ?? []
-    dataState.dataLevelsResidue[dir][0][shift](...add)
+    aggData[0][shift](...addData)
+    dataLevelsResidue[dir][0] = dataLevelsResidue[dir][0] ?? []
+    dataLevelsResidue[dir][0][shift](...addData)
 
     for (let level = 1; level <= _max_level_; level++) {
         let newDataCount =
-            dataState.dataLevelsResidue[dir][level - 1].length -
-            (dataState.dataLevelsResidue[dir][level - 1].length % base)
+            dataLevelsResidue[dir][level - 1].length - (dataLevelsResidue[dir][level - 1].length % base)
         if (newDataCount === 0) {
             break
         }
+
         let newDataToProcess: TTick[]
-        if (dir === 'left') {
-            newDataToProcess = dataState.dataLevelsResidue[dir][level - 1].splice(-newDataCount)
-        } else {
-            newDataToProcess = dataState.dataLevelsResidue[dir][level - 1].splice(0, newDataCount)
-        }
+        newDataToProcess = dataLevelsResidue[dir][level - 1].splice(dir === 'left' ? -newDataCount : 0, 0)
         let processedData = doAvg({ data: newDataToProcess, base })
 
         aggData[level] = aggData[level] ?? []
         aggData[level][shift](...processedData)
 
-        dataState.dataLevelsResidue[dir][level] = dataState.dataLevelsResidue[dir][level] ?? []
-        dataState.dataLevelsResidue[dir][level][shift](...processedData)
-
-        // console.log('newDataToProcess', level, newDataCount, '=>', aggData[level].length)
+        dataLevelsResidue[dir][level] = dataLevelsResidue[dir][level] ?? []
+        dataLevelsResidue[dir][level][shift](...processedData)
     }
 }
-
-// let avgPrice =
-//     toavg.reduce((acc, v) => {
-//         return acc + v.price
-//     }, 0) / 2

@@ -6,7 +6,7 @@ import { RefLabel } from '~/features/Trade/components/RefLabel'
 import { UI } from '~/features/Trade/components/UI'
 import { derivedState, state } from '~/features/Trade/state/state'
 import {
-    aggData,
+    doAggData,
     getExchangeInfo,
     loadData,
     wsSubscribeCurrentPrice,
@@ -31,15 +31,27 @@ export const Trade = ({ isReactVis }: { isReactVis?: boolean }) => {
 
     useEffect(
         () =>
-            subscribe(dataState.data, () => {
-                aggData({ isPrepend: true, dataKey: 'data' })
+            subscribe(dataState.pastData, () => {
+                doAggData({
+                    isPrepend: true,
+                    addData: dataState.pastData,
+                    aggData: dataState.aggData,
+                    dataLevelsResidue: dataState.dataLevelsResidue,
+                })
+                dataState.pastData.length = 0
             }),
         []
     )
     useEffect(
         () =>
             subscribe(dataState.dataWs, () => {
-                aggData({ isPrepend: false, dataKey: 'dataWs' })
+                doAggData({
+                    isPrepend: false,
+                    addData: dataState.dataWs,
+                    aggData: dataState.aggData,
+                    dataLevelsResidue: dataState.dataLevelsResidue,
+                })
+                dataState.dataWs.length = 0
             }),
         []
     )
