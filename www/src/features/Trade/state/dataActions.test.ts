@@ -1,9 +1,9 @@
 import { AggregatedTrade } from 'binance-api-node'
 import dayjs from 'dayjs'
 import { TTick } from '~/features/Trade/localConstants'
+import { doAggData } from '~/features/Trade/state/aggUtils'
 import { dataState, TDataLevelsResidue } from '~/features/Trade/state/dataState'
 import { createTick } from '~/features/Trade/utils'
-import { doAggData } from './dataActions'
 
 const testWsAdditionToTheRight = () => {
     let _ws_data_len_ = 10

@@ -5,12 +5,7 @@ import { sleep, runAndSubscribeFew, runAndSubscribeKey } from '~/utils'
 import { RefLabel } from '~/features/Trade/components/RefLabel'
 import { UI } from '~/features/Trade/components/UI'
 import { derivedState, state } from '~/features/Trade/state/state'
-import {
-    doAggData,
-    getExchangeInfo,
-    loadData,
-    wsSubscribeCurrentPrice,
-} from '~/features/Trade/state/dataActions'
+import { loadData, wsSubscribeCurrentPrice } from '~/features/Trade/state/dataActions'
 
 import { Chart } from '~/features/Trade/components/Chart'
 import { ChartReactVis } from '~/features/Trade/components/ChartReactVis'
@@ -18,6 +13,7 @@ import { bClient, createTick } from '~/features/Trade/utils'
 import { subscribe } from 'valtio'
 import { subscribeKey } from 'valtio/utils'
 import { dataState } from '~/features/Trade/state/dataState'
+import { doAggData } from '~/features/Trade/state/aggUtils'
 
 export const Trade = ({ isReactVis }: { isReactVis?: boolean }) => {
     useEffect(
