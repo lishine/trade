@@ -7,18 +7,18 @@ import { RefLabel } from '~/features/Trade/components/RefLabel'
 import { subscribe, proxy, useSnapshot } from 'valtio'
 
 import { derivedState, state } from '~/features/Trade/state/state'
-import { dataState } from '~/features/Trade/state/state'
 import { events } from '~/features/Trade/state/events'
 import dayjs from 'dayjs'
 import { Dot } from './Dot'
-import { TTick } from '~/features/Trade/localConstants'
+import { TTick, _max_points_ } from '~/features/Trade/localConstants'
+import { dataState } from '~/features/Trade/state/dataState'
 
-const n_charts = 4
-const max_height = 900
+const _max_height_ = 900
 
 const getHeight = ({ data }: { data: TTick[][] }) => {
-    return max_height / (data.length + 1)
+    return _max_height_ / (data.length + 1)
 }
+// getHeight({ data: dataSnap.aggData })
 
 export const Chart = () => {
     let snap = useSnapshot(state)
@@ -27,14 +27,18 @@ export const Chart = () => {
 
     return (
         <div onWheel={(w) => events.onWheel(w.deltaY)}>
-            <LineChart width={1900} height={getHeight({ data: dataSnap.dataAvg })} data={dataSnap.data}>
+            <LineChart
+                width={1900}
+                height={_max_height_}
+                data={dataSnap.aggData[state.zoomOutLevel]?.slice(-_max_points_) ?? []}
+            >
                 <Line
                     isAnimationActive={false}
                     type='monotone'
                     dataKey='price'
                     stroke='#2A62FF'
                     strokeWidth={1}
-                    // dot={true}
+                    dot={false}
                     // dot={{ stroke: 'grey', strokeWidth: 1 }}
                     // dot={Dot}
                 />
@@ -44,7 +48,7 @@ export const Chart = () => {
                     dataKey='time'
                     // tickCount={100}
                     minTickGap={100}
-                    tickFormatter={(v) => dayjs(v).format('ss')}
+                    tickFormatter={(v) => dayjs(v).format('hh:mm:ss')}
                 />
                 <YAxis
                     tickCount={10}
@@ -61,6 +65,49 @@ export const Chart = () => {
         </div>
     )
 }
+
+// {
+//     dataState.aggData.map((d, index) => {
+//         return (
+//             <LineChart
+//                 key={index}
+//                 width={1900}
+//                 height={getHeight({ data: dataSnap.aggData })}
+//                 data={d}
+//             >
+//                 <Line
+//                     isAnimationActive={false}
+//                     type='monotone'
+//                     dataKey='price'
+//                     stroke='#2A62FF'
+//                     strokeWidth={1}
+//                     // dot={true}
+//                     // dot={{ stroke: 'grey', strokeWidth: 1 }}
+//                     // dot={Dot}
+//                 />
+
+//                 {/* <CartesianGrid stroke='#ccc' strokeDasharray='7 7' /> */}
+//                 <XAxis
+//                     dataKey='time'
+//                     // tickCount={100}
+//                     minTickGap={100}
+//                     tickFormatter={(v) => dayjs(v).format('ss')}
+//                 />
+//                 <YAxis
+//                     tickCount={10}
+//                     type='number'
+//                     domain={['dataMin', 'dataMax']}
+//                     padding={{
+//                         top: 0,
+//                         bottom: 20,
+//                     }}
+//                     width={100}
+//                     tickFormatter={(n: number) => n.toFixed(derivedState.decimals)}
+//                 />
+//             </LineChart>
+//         )
+//     })
+// }
 
 // <ReferenceLine
 //     y={snap.lastPrice}
