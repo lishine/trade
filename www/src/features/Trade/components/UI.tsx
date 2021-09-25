@@ -20,9 +20,11 @@ import {
 } from '@chakra-ui/react'
 import { state } from '~/features/Trade/state/state'
 import { placeOrder } from '~/features/Trade/state/serverActions'
+import { dataState, derivedDataState } from '~/features/Trade/state/dataState'
 
 export const UI = () => {
     let snap = useSnapshot(state)
+    let derivedDataSnap = useSnapshot(derivedDataState)
     return (
         <div>
             {/* <ButtonGroup variant='solid' size='lg' spacing='20'>
@@ -67,6 +69,7 @@ export const UI = () => {
                     />
                     <Text>SHORT</Text>
                 </HStack>
+                <div>Hours loaded: {derivedDataSnap.hoursLoaded}</div>
             </HStack>
             {/* <Button
                             colorScheme='darkred'

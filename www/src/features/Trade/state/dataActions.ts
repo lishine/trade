@@ -130,8 +130,7 @@ export const loadData = () => {
             let mappedTrades = aggTrades.map((t) => createTick({ trade: t }))
 
             dataState.data.unshift(...mappedTrades)
-            console.log('derivedState.minutesLoaded', derivedDataState.minutesLoaded)
-            if (derivedDataState.minutesLoaded > 2) {
+            if (derivedDataState.minutesLoaded > 100) {
                 break
             }
             await sleep(100)

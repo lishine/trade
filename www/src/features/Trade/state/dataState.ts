@@ -14,7 +14,7 @@ export const dataState = proxy({
     dataLevelsResidue: { left: [], right: [] } as TDataLevelsResidue,
 })
 
-export const __derivedDataState = derive(
+const __derivedDataState = derive(
     {
         secondsLoaded: (get) => {
             if (!get(dataState).aggData[0]?.length) {
@@ -28,7 +28,7 @@ export const __derivedDataState = derive(
     { proxy: dataState }
 )
 
-export const _derivedDataState = derive(
+const _derivedDataState = derive(
     {
         minutesLoaded: (get) => {
             return +(get(__derivedDataState).secondsLoaded / 60).toFixed(1)

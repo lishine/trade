@@ -1,6 +1,6 @@
 import { roundDecimals } from '~/utils'
 
-export const _max_points_ = 200
+export const _max_points_ = 500
 
 export type TTick = {
     time: number
