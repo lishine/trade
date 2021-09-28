@@ -78,7 +78,11 @@ export const doAggData = ({
         }
 
         let newDataToProcess: TTick[]
-        newDataToProcess = dataLevelsResidue[dir][level - 1].splice(dir === 'left' ? -newDataCount : 0, 0)
+        if (dir === 'left') {
+            newDataToProcess = dataLevelsResidue[dir][level - 1].splice(-newDataCount)
+        } else {
+            newDataToProcess = dataLevelsResidue[dir][level - 1].splice(0, newDataCount)
+        }
         let processedData = doAvg({ data: newDataToProcess, base })
 
         aggData[level] = aggData[level] ?? []

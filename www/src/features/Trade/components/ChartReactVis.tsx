@@ -18,12 +18,12 @@ import { RefLabel } from '~/features/Trade/components/RefLabel'
 import { subscribe, proxy, useSnapshot } from 'valtio'
 
 import { derivedState, state } from '~/features/Trade/state/state'
-import { dataState } from '~/features/Trade/state/state'
+// import { dataState } from '~/features/Trade/state/state'
 import { events } from '~/features/Trade/state/events'
 import dayjs from 'dayjs'
 
 export const ChartReactVis = () => {
-    let dataSnap = useSnapshot(dataState)
+    // let dataSnap = useSnapshot(dataState)
 
     const Line = LineMarkSeries
 

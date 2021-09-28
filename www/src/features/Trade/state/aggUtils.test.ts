@@ -15,26 +15,21 @@ const testWsAdditionToTheRight = () => {
     let aggData: TTick[][] = []
     let dataLevelsResidue: TDataLevelsResidue = { left: [], right: [] }
 
-    dataState.dataWs = data
-    dataState.aggData.length = 0
-    dataState.dataLevelsResidue = { left: [], right: [] }
-
     doAggData({ isPrepend: false, dataLevelsResidue, addData: data, aggData })
 
     console.log('--------------FIRST TIME----------------')
-    console.log('aggData', dataState.aggData)
-    console.log('dataState.dataLevelsResidue', JSON.stringify(dataState.dataLevelsResidue, null, 2))
-    console.log('dataState.dataWs', dataState.dataWs)
+    console.log('aggData', aggData)
+    console.log('dataState.dataLevelsResidue', JSON.stringify(dataLevelsResidue, null, 2))
+    console.log('dataState.dataWs', data)
     console.log('-----END------FIRST TIME----------------')
 
     data = data.map((d) => ({ ...d, time: d.time + _ws_data_len_, price: d.price + _ws_data_len_ }))
-    dataState.dataWs = data
     doAggData({ isPrepend: false, dataLevelsResidue, addData: data, aggData })
 
     console.log('-----START----SECOND TIME----------------')
-    console.log('aggData', dataState.aggData)
-    console.log('dataState.dataLevelsResidue', JSON.stringify(dataState.dataLevelsResidue, null, 2))
-    console.log('dataState.dataWs', dataState.dataWs)
+    console.log('aggData', aggData)
+    console.log('dataState.dataLevelsResidue', JSON.stringify(dataLevelsResidue, null, 2))
+    console.log('data', data)
     console.log('-----END------SECOND TIME----------------')
 }
 
@@ -52,9 +47,9 @@ const testPastDataAdditionToTheLeft = () => {
 
     doAggData({ isPrepend: true, dataLevelsResidue, addData: data, aggData })
 
-    console.log('aggData', dataState.aggData)
-    console.log('dataState.dataLevelsResidue', JSON.stringify(dataState.dataLevelsResidue, null, 2))
-    console.log('dataState.data', dataState.pastData)
+    console.log('aggData', aggData)
+    console.log('dataLevelsResidue', JSON.stringify(dataLevelsResidue, null, 2))
+    console.log('data', data)
     console.log('-----END------FIRST TIME----------------')
 
     console.log('-----START----SECOND TIME----------------')
@@ -62,9 +57,9 @@ const testPastDataAdditionToTheLeft = () => {
     data = data.map((d) => ({ ...d, time: d.time - _data_len_, price: d.price - _data_len_ }))
     doAggData({ isPrepend: true, dataLevelsResidue, addData: data, aggData })
 
-    console.log('aggData', dataState.aggData)
-    console.log('dataState.dataLevelsResidue', JSON.stringify(dataState.dataLevelsResidue, null, 2))
-    console.log('dataState.data', dataState.pastData)
+    console.log('aggData', aggData)
+    console.log('dataState.dataLevelsResidue', JSON.stringify(dataLevelsResidue, null, 2))
+    console.log('dataState.data', data)
     console.log('-----END------SECOND TIME----------------')
 }
 

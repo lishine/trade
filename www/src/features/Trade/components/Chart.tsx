@@ -25,12 +25,17 @@ export const Chart = () => {
     let derivedSnap = useSnapshot(derivedState)
     let dataSnap = useSnapshot(dataState)
 
+    let trades = dataSnap.trades[snap.symbol]
+    if (!trades) {
+        return null
+    }
+
     return (
         <div onWheel={(w) => events.onWheel(w.deltaY)}>
             <LineChart
                 width={1900}
                 height={_max_height_}
-                data={dataSnap.aggData[state.zoomOutLevel]?.slice(-_max_points_) ?? []}
+                data={trades.aggData[snap.zoomOutLevel]?.slice(-_max_points_) ?? []}
             >
                 <Line
                     isAnimationActive={false}
@@ -59,7 +64,7 @@ export const Chart = () => {
                         bottom: 20,
                     }}
                     width={100}
-                    tickFormatter={(n: number) => n.toFixed(derivedState.decimals)}
+                    // tickFormatter={(n: number) => n.toFixed(derivedState.decimals)}
                 />
             </LineChart>
         </div>

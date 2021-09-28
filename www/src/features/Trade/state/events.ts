@@ -4,6 +4,11 @@ import { state } from '~/features/Trade/state/state'
 
 export const events = {
     onWheel: (deltaY: number) => {
+        let trades = dataState.trades[state.symbol]
+        if (!trades) {
+            return
+        }
+
         if (deltaY > 0) {
             let newLevel = state.zoomOutLevel - 1
             if (newLevel > 0) {
@@ -11,10 +16,21 @@ export const events = {
             }
         } else {
             let newLevel = state.zoomOutLevel + 1
-            if (newLevel < dataState.aggData.length && dataState.aggData[newLevel].length >= _max_points_) {
+            if (
+                newLevel < trades.aggData.length &&
+                trades.aggData[newLevel] &&
+                trades.aggData[newLevel].length >= _max_points_
+            ) {
                 state.zoomOutLevel = newLevel
             }
         }
+        console.log(
+            `onWheel state.zoomOutLevel ${state.zoomOutLevel}`,
+            deltaY,
+            trades.aggData.length,
+            trades.aggData[0]?.length,
+            trades.aggData[1]?.length
+        )
     },
 }
 

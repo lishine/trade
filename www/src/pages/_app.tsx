@@ -4,7 +4,15 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeConfig, extendTheme } from '@chakra-ui/react'
 import { useMountedState } from 'react-use'
-import React, { useState, useLayoutEffect, ReactNode, useEffect, ReactElement } from 'react'
+import React, {
+    useCallback,
+    useRef,
+    useState,
+    useLayoutEffect,
+    ReactNode,
+    useEffect,
+    ReactElement,
+} from 'react'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -68,10 +76,42 @@ function App({ Component, pageProps }: AppProps) {
     useEffect(() => {
         document.body.style.background = 'var(--chakra-colors-gray-800)'
     }, [])
+    // useEffect(() => {
+    //     if ('serviceWorker' in navigator) {
+    //         window.addEventListener('load', function () {
+    //             navigator.serviceWorker.register('/sw.js').then(
+    //                 function (registration) {
+    //                     console.log('Service Worker registration successful with scope: ', registration.scope)
+    //                 },
+    //                 function (err) {
+    //                     console.log('Service Worker registration failed: ', err)
+    //                 }
+    //             )
+    //         })
+    //     }
+    // }, [])
+
+    // const workerRef = useRef<Worker | undefined>()
+    // useEffect(() => {
+    //     workerRef.current = new Worker(new URL('../worker/worker.ts', import.meta.url))
+    //     workerRef.current.onmessage = (evt) => alert(`WebWorker Response => ${evt.data}`)
+    //     return () => {
+    //         workerRef.current?.terminate()
+    //     }
+    // }, [])
+
+    // const handleWork = useCallback(async () => {
+    //     workerRef.current?.postMessage(100000)
+    // }, [])
+
     return (
         <QueryClientProvider client={queryClient}>
             <ChakraProvider resetCSS theme={theme}>
-                <Component {...pageProps} />
+                <div>
+                    {/* <button onClick={handleWork}>Calculate PI</button> */}
+
+                    <Component {...pageProps} />
+                </div>
             </ChakraProvider>
         </QueryClientProvider>
     )
